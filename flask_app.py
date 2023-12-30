@@ -72,3 +72,28 @@ def api(user, record):
         "data": request.get_json(),
     }
     return Response(json.dumps(data), mimetype="application/json")
+
+
+# RESTful风格
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_restful import Api, Resource, reqparse
+from sqlalchemy import or_
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///example.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+api = Api(app)
+
+class User(db.Model):
+    # 我们的数据库模型 - 与以前相同
+
+class UserResource(Resource):
+    # 描绘了所有 CRUD 操作的 Flask-RESTful 资源类 - 与以前相同
+
+api.add_resource(UserResource, '/user', '/user/<int:user_id>')
+
+if __name__ == '__main__':
+    db.create_all()
+    app.run(debug=True)
